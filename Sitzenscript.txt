@@ -1,0 +1,33 @@
+-- LocalScript in StarterPlayerScripts
+
+-- Variables
+local userInputService = game:GetService("UserInputService")
+local players = game:GetService("Players")
+local player = players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character:WaitForChild("Humanoid")
+local animation = Instance.new("Animation")
+animation.AnimationId = "rbxassetid://YOUR_ANIMATION_ID" -- Replace with your Animation ID
+
+local animationTrack = humanoid:LoadAnimation(animation)
+local isSitting = false
+
+-- Function to toggle sitting
+local function toggleSit()
+    if isSitting then
+        -- Stop sitting animation and revert to default state
+        animationTrack:Stop()
+        humanoid:MoveTo(character.PrimaryPart.Position)  -- Ensure character is not stuck
+    else
+        -- Play sitting animation
+        animationTrack:Play()
+    end
+    isSitting = not isSitting
+end
+
+-- Bind function to key press
+userInputService.InputBegan:Connect(function(input, gameProcessedEvent)
+    if not gameProcessedEvent and input.KeyCode == Enum.KeyCode.C then
+        toggleSit()
+    end
+end)
